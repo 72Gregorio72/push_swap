@@ -1,0 +1,2 @@
+num=`shuf -i 0-500 -n 500`
+clear;make;cc main.c push_swap.a;./a.out 11 6 19 14 8 2 16
