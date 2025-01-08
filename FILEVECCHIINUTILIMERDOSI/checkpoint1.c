@@ -1,141 +1,52 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   sorting.c                                          :+:      :+:    :+:   */
+/*   checkpoint1.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: gpicchio <gpicchio@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/07 12:34:01 by gpicchio          #+#    #+#             */
-/*   Updated: 2025/01/08 18:08:08 by gpicchio         ###   ########.fr       */
+/*   Updated: 2025/01/08 17:23:44 by gpicchio         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
-/* void	push_all(t_list	**a, t_list **b)
+void	push_all(t_list	**a, t_list **b)
 {
 	int		i;
+	//int		max;
 
 	i = ft_lstsize(*a);
+	//max = i - 1;
 	while (i > 2)
 	{
 		pb(a, b);
 		i--;
 	}
-} */
-void stack_to_array(t_list *a, int *arr) {
-    int i = 0;
-    while (a) {
-        arr[i++] = *(int *)a->content;
-        a = a->next;
-    }
 }
 
-int *find_lis(t_list *stack)
+/* void	push_all(t_list	**a, t_list **b)
 {
-	int *arr;
-	int *lis;
-	int	*max_lis;
-	int i;
-	int j;
-	int	l;
-	int	k;
-	int	size;
-	int max;
+	int		i;
+	int		max;
 
-	i = 0;
-	j = 0;
-	k = 0;
-	max = 0;
-	size = ft_lstsize(stack);
-	arr = (int *)malloc(sizeof(int) * size);
-	lis = (int *)malloc(sizeof(int) * size);
-	max_lis = (int *)malloc(1);
-	stack_to_array(stack, arr);
-	while (i < size)
+	i = ft_lstsize(*a);
+	max = i - 1;
+	while (i > 2)
 	{
-		for (int h = 0; h < size + 1; h++) {
-			lis[h] = -1;
-		}
-		//ft_printf("\n");
-		l = i;
-		j = 0;
-		lis[k] = arr[i];
-		k++;
-		while (j <= size)
-		{
-			if (l >= size)
-				l = 0;
-			if (arr[l] > lis[k - 1])
-			{
-				lis[k] = arr[l];
-				k++;
-			}
-			j++;
-			l++;
-		}
-		lis[k] = -1;
-		for (int h = 0; h < k ; h++) {
-			if (lis[h] == -1) break;
-			//ft_printf("%d ", lis[h]);
-		}
-		
-		if(k > max)
-		{
-			max = k;
-			free(max_lis);
-			max_lis = (int *)malloc(sizeof(int) * k + 1);
-			for (int l = 0; l < max + 1; l++)
-			{
-				max_lis[l] = lis[l];
-			}
-		}
-		//ft_printf("maxxxx: %d\n", max);
-		k = 0;
-		i++;
-	}
-    return (max_lis);
-}
-
-int	check_lis(int value, int *lis)
-{
-	int i;
-
-	i = 0;
-	while (lis[i] != -1)
-	{
-		if (lis[i] == value)
-			return (1);
-		i++;
-	}
-	return (0);
-}
-
-void push_all(t_list **a, t_list **b)
-{
-	int i;
-	int lis_size;
-	int *is_lis;
-
-	is_lis = find_lis(*a);
-	lis_size = 0;
-	while (is_lis[lis_size] != -1)
-		lis_size++;
-	for (i = 0;ft_lstsize(*a) > lis_size; i++)
-	{
-		if (!check_lis(*(int *)(*a)->content, is_lis))
+		if (*(int *)(*a)->content != 0 && *(int *)(*a)->content != max)
 		{
 			pb(a, b);
 		}
 		else
 		{
 			ra(a);
-			ft_printf("ra\n");
-			i--;
+			i++;
 		}
+		i--;
 	}
-}
-
+} */
 
 static int	is_sorted(t_list *a)
 {
@@ -346,23 +257,12 @@ void	rotate_a_until_the_right_number_to_print_on_top_fra_parentesi_0_chiuse_pare
 
 void	sorting(t_list	**a, t_list **b, int *vett)
 {
-	t_list *tmp;
-
-	
 	push_all(a, b);
-	/* while (ft_lstsize(*a) > 2)
-	{
-		pb(a, b);
-	} */
-	tmp = *a;
-	while (tmp)
-	{
-		vett[*(int *)tmp->content] = *(int *)tmp->content;
-		tmp = tmp->next;
-	}
+	vett[*(int *)(*a)->content] = *(int *)(*a)->content;
+	vett[*(int *)(*a)->next->content] = *(int *)(*a)->next->content;
 	/* for (int i = 0; vett[i] != -2; i++)
 	{
-		ft_printf("vett[%d] = %d\n", i, vett[i]);
+		//ft_printf("vett[%d] = %d\n", i, vett[i]);
 	} */
 	while (ft_lstsize(*b) > 0)
 	{
@@ -377,10 +277,6 @@ void	sorting(t_list	**a, t_list **b, int *vett)
 		//ft_lstprint(*a);
 		//ft_lstprint(*b);
 	}
-	/* for (int i = 0; vett[i] != -2; i++)
-	{
-		ft_printf("vett[%d] = %d\n", i, vett[i]);
-	} */
 		// ft_printf("//////////////////////\n");
 	rotate_a_until_the_right_number_to_print_on_top_fra_parentesi_0_chiuse_parentesi(a);
 	/* if(is_sorted(*a))

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   sorting.c                                          :+:      :+:    :+:   */
+/*   checkpoint.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: gpicchio <gpicchio@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/07 12:34:01 by gpicchio          #+#    #+#             */
-/*   Updated: 2025/01/08 18:08:08 by gpicchio         ###   ########.fr       */
+/*   Updated: 2025/01/08 17:42:15 by gpicchio         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -192,7 +192,6 @@ void	init_moves(t_moves *moves)
 	moves->min_rrb = 0;
 	moves->min_rrr = 0;	
 }
-
 void	do_moves(t_moves moves, t_list **a, t_list **b)
 {
 	if (moves.min_ra > 0 && moves.min_rb > 0)
@@ -348,13 +347,8 @@ void	sorting(t_list	**a, t_list **b, int *vett)
 {
 	t_list *tmp;
 
-	
-	push_all(a, b);
-	/* while (ft_lstsize(*a) > 2)
-	{
-		pb(a, b);
-	} */
 	tmp = *a;
+	//push_all(a, b);
 	while (tmp)
 	{
 		vett[*(int *)tmp->content] = *(int *)tmp->content;
@@ -362,7 +356,7 @@ void	sorting(t_list	**a, t_list **b, int *vett)
 	}
 	/* for (int i = 0; vett[i] != -2; i++)
 	{
-		ft_printf("vett[%d] = %d\n", i, vett[i]);
+		//ft_printf("vett[%d] = %d\n", i, vett[i]);
 	} */
 	while (ft_lstsize(*b) > 0)
 	{
@@ -377,10 +371,6 @@ void	sorting(t_list	**a, t_list **b, int *vett)
 		//ft_lstprint(*a);
 		//ft_lstprint(*b);
 	}
-	/* for (int i = 0; vett[i] != -2; i++)
-	{
-		ft_printf("vett[%d] = %d\n", i, vett[i]);
-	} */
 		// ft_printf("//////////////////////\n");
 	rotate_a_until_the_right_number_to_print_on_top_fra_parentesi_0_chiuse_parentesi(a);
 	/* if(is_sorted(*a))

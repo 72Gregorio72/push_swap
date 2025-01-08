@@ -1,36 +1,30 @@
-NAME = push_swap.a
-SRCS = srcs/swap.c srcs/rotate.c srcs/revrotate.c srcs/push.c algorithm/sorting.c
-OBJS = $(SRCS:.c=.o)
+NAME = push_swap
+SRCS = srcs/swap.c srcs/rotate.c srcs/revrotate.c srcs/push.c algorithm/sorting.c main.c
 INCLUDE = includes
-CC = cc -Wall -Wextra -Werror -g
+CC = cc -g#-Wall -Wextra -Werror 
 
 all: $(NAME)
 
-$(NAME): $(OBJS)
-	make -C ft_printf all
-	cp ft_printf/libftprintf.a $(NAME)
-	ar -rcs $(NAME) $(OBJS) ft_printf/libftprintf.a
+$(NAME): $(SRCS)
+	make -C libft all bonus
+	$(CC) -I$(INCLUDE) $(SRCS) ./libft/libft.a -o $(NAME)
 	echo "${BOLD}${GREEN}Compilation successful${NO_COLOR}"
 
-%.o: %.c
-	$(CC) -I${INCLUDE} -c $< -o $@
-
 clean: bclean
-	make clean -C ft_printf
-	rm -f $(OBJS)
+	make clean -C libft
 	echo "${BOLD}${YELLOW}Cleaned all${NO_COLOR}"
 
 fclean: clean
-	make fclean -C ft_printf
+	make fclean -C libft
 	rm -f $(NAME)
 	echo "${BOLD}${BLUE}All file cleaned${NO_COLOR}"
 
 re: fclean all
 
 bonus: $(BONUSOBJS)
-	make -C ft_printf bonus
-	cp ft_printf/libftprintf.a $(NAME)
-	ar -rcs $(NAME) $(BONUSOBJS) ft_printf/libftprintf.a
+	make -C libft bonus
+	cp libft/libft.a $(NAME)
+	ar -rcs $(NAME) $(BONUSOBJS) libft/libft.a
 	echo "${BOLD}${GREEN}Bonus compilation successful${NO_COLOR}"
 
 bclean:
@@ -38,3 +32,10 @@ bclean:
 	echo "${BOLD}${YELLOW}Bonus cleaned${NO_COLOR}"
 
 .PHONY: all clean fclean re bonus
+.SILENT:
+RED = \033[1;31m
+GREEN = \033[1;32m
+YELLOW = \033[1;33m
+BLUE = \033[1;34m
+NO_COLOR = \033[0m
+BOLD = \033[1m
