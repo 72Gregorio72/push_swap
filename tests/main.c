@@ -6,7 +6,7 @@
 /*   By: gpicchio <gpicchio@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/16 14:24:03 by gpicchio          #+#    #+#             */
-/*   Updated: 2025/01/10 12:54:27 by gpicchio         ###   ########.fr       */
+/*   Updated: 2025/01/10 17:27:35 by gpicchio         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,4 +131,34 @@ int	main(int ac, char **av)
 	ft_lstprint(b); */
 	return (0);
 }
-//0 3 4 1 2
+/*0 3 4 1 2
+while (*str)
+	{
+		char **tmp = str;
+		while (*tmp) {
+			if (ft_strncmp(*tmp, "ra\n", 3) == 0) {
+				found = 1;
+				break ;
+			}
+			i++;
+		}
+		if (found == 0)
+			break ;
+		if (ft_strncmp(*str, "sa\n", 3) == 0)
+		{
+			sa(a);
+			ft_printf("sa\n");
+		}
+		else if (ft_strncmp(*str, "ra\n", 3) == 0)
+		{
+			ra(a);
+			ft_printf("ra\n");
+		}
+		else if (ft_strncmp(*str, "pb\n", 3) == 0)
+		{
+			pb(a, b);
+		}
+		
+		str++;
+	}
+*/

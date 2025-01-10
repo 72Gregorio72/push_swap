@@ -6,7 +6,7 @@
 /*   By: gpicchio <gpicchio@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/07 12:34:01 by gpicchio          #+#    #+#             */
-/*   Updated: 2025/01/10 13:14:34 by gpicchio         ###   ########.fr       */
+/*   Updated: 2025/01/10 17:31:41 by gpicchio         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,20 +101,22 @@ void	check_sa(t_list **a)
 {
 	int	num;
 
-	num = *(int *)(*a)->content;
-	while (*a && (*a)->next)
+	if (*(int *)(*a)->content - 1 == *(int *)(*a)->next->content)
 	{
-		if ((*a)->next && *(int *)(*a)->content - 1 == *(int *)(*a)->next->content)
+		sa(a);
+		(*a)->is_sa = 1;
+	}
+	num = *(int *)(*a)->content;
+	ra(a);
+	while (*(int *)(*a)->content != num)
+	{
+		if (*(int *)(*a)->content - 1 == *(int *)(*a)->next->content && *(int *)(*a)->next->content != num)
 		{
 			sa(a);
 			(*a)->is_sa = 1;
-			ra(a);
 		}
-		if ((*a)->next)	
-			ra(a);
-	}
-	while (*(int *)(*a)->content != num)
 		ra(a);
+	}
 }
 
 void push_all(t_list **a, t_list **b)
@@ -125,14 +127,14 @@ void push_all(t_list **a, t_list **b)
     t_list *temp;
 
 	check_sa(a);
-	ft_lstprint(*a);
+	//ft_lstprint(*a);
     // Trova la LIS e la sua dimensione
     is_lis = find_lis(*a, &lis_size);
-	ft_printf("LIS: ");
+	/*ft_printf("LIS: ");
 	for (int i = 0; i < lis_size; i++) {
 		ft_printf("%d ", is_lis[i]);
 	}
-	ft_printf("\n");
+	ft_printf("\n"); */
     // Itera finché ci sono elementi nella lista `a`
     int size = ft_lstsize(*a);
     for (i = 0; i < size; i++)
@@ -146,7 +148,10 @@ void push_all(t_list **a, t_list **b)
             }
         }
 		if (temp->is_sa == 1)
+		{
 			ft_printf("sa\n");
+			temp->is_sa = 0;
+		}
         if (is_in_lis)
 		{
 			ra(a);
@@ -157,8 +162,6 @@ void push_all(t_list **a, t_list **b)
     }
     free(is_lis);
 }
-
-
 
 static int	is_sorted(t_list *a)
 {
