@@ -6,7 +6,7 @@
 /*   By: gpicchio <gpicchio@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/16 14:24:03 by gpicchio          #+#    #+#             */
-/*   Updated: 2025/01/08 18:19:49 by gpicchio         ###   ########.fr       */
+/*   Updated: 2025/01/10 12:54:27 by gpicchio         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,17 +21,19 @@ void	ft_lstprint(t_list *lst)
 	}
 }
 
-static int	find_pos(t_list *a, int min)
+static int	find_pos(t_list *a, int num)
 {
 	int	pos;
 
 	pos = 0;
-	while (a && *(int *)a->content != min)
+	while (a)
 	{
+		if (*(int *)a->content == num)
+			return pos;
 		pos++;
 		a = a->next;
 	}
-	return (pos);
+	return -1; // Return -1 if the number is not found
 }
 
 void	ft_sort_int_tab(int *arr, int size)
@@ -58,28 +60,15 @@ void	ft_sort_int_tab(int *arr, int size)
 	}
 }
 
-void	put_index(t_list **a, int pos, int index)
-{
-	t_list	*tmp;
-	int		i;
-
-	tmp = *a;
-	i = 0;
-	while (i < pos)
-	{
-		tmp = tmp->next;
-		i++;
-	}
-	*(int *)tmp->content = index;
-}
-
 void	fill_index(t_list **a)
 {
 	t_list	*tmp;
 	int		*arr;
+	int		*index;
 	int		i;
 	
 	arr = malloc(sizeof(int) * ft_lstsize(*a));
+	index = malloc(sizeof(int) * ft_lstsize(*a));
 	i = 0;
 	tmp = *a;
 	while (tmp)
@@ -93,11 +82,19 @@ void	fill_index(t_list **a)
 	i = 0;
 	while (i < ft_lstsize(*a))
 	{
-		put_index(a, find_pos(tmp, arr[i]), i);
+		index[find_pos(tmp, arr[i])] = i;
 		i++;
 	}
-	
+	i = 0;
+	tmp = *a;
+	while (tmp)
+	{
+		*(int *)tmp->content = index[i];
+		tmp = tmp->next;
+		i++;
+	}
 	free(arr);
+	free(index);
 }
 
 int	main(int ac, char **av)
@@ -119,6 +116,7 @@ int	main(int ac, char **av)
 		}
 	}
 	fill_index(&a);
+	//ft_lstprint(a);
 	vett = (int *)malloc(sizeof(int) * (ft_lstsize(a) + 1));
 	int i;
 	for (i = 0; i < ft_lstsize(a); i++)
@@ -126,10 +124,11 @@ int	main(int ac, char **av)
 		vett[i] = -1;
 	}
 	vett[i] = -2;
-	ft_lstprint(a);
-	//sorting(&a, &b, vett);
+	sorting(&a, &b, vett);
+	//ft_lstprint(a);
 	/* ;
 	ft_printf("///////////////\n");
 	ft_lstprint(b); */
 	return (0);
 }
+//0 3 4 1 2

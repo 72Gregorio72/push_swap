@@ -13,7 +13,7 @@ if [[ ! -x ./checker_linux ]]; then
     exit 1
 fi
 
-ARG="1 2 3 4 5"
+ARG="-1 2 -3 4 -5"
 moves=`./push_swap $ARG`
 tot_moves=$(if [[ -n $moves ]]; then echo "$moves" | wc -l; else echo 0; fi)
 checker=$(if [[ -n $moves ]]; then echo "$moves"; else echo -n ""; fi | ./checker_linux $ARG 2>/dev/null)

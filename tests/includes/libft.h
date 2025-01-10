@@ -6,7 +6,7 @@
 /*   By: gpicchio <gpicchio@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/18 11:49:43 by gpicchio          #+#    #+#             */
-/*   Updated: 2025/01/07 15:05:40 by gpicchio         ###   ########.fr       */
+/*   Updated: 2025/01/10 12:24:22 by gpicchio         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,7 @@ typedef struct s_list
 {
 	void			*content;
 	struct s_list	*next;
+	int				is_sa;
 }	t_list;
 
 t_list	*ft_lstnew(void *content);

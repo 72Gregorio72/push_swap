@@ -6,7 +6,7 @@
 /*   By: gpicchio <gpicchio@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/16 14:10:31 by gpicchio          #+#    #+#             */
-/*   Updated: 2025/01/07 16:41:38 by gpicchio         ###   ########.fr       */
+/*   Updated: 2025/01/10 12:26:33 by gpicchio         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,6 @@ void	sa(t_list **head)
 		tmp->next = *head;
 		*head = tmp;
 	}
-	ft_printf("sa\n");
 }
 
 void	sb(t_list **head)

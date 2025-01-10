@@ -6,7 +6,7 @@
 /*   By: gpicchio <gpicchio@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/07 12:34:01 by gpicchio          #+#    #+#             */
-/*   Updated: 2025/01/08 18:08:08 by gpicchio         ###   ########.fr       */
+/*   Updated: 2025/01/10 13:14:34 by gpicchio         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,70 +31,56 @@ void stack_to_array(t_list *a, int *arr) {
     }
 }
 
-int *find_lis(t_list *stack)
-{
-	int *arr;
-	int *lis;
-	int	*max_lis;
-	int i;
-	int j;
-	int	l;
-	int	k;
-	int	size;
-	int max;
+#include <stdlib.h>
 
-	i = 0;
-	j = 0;
-	k = 0;
-	max = 0;
-	size = ft_lstsize(stack);
-	arr = (int *)malloc(sizeof(int) * size);
-	lis = (int *)malloc(sizeof(int) * size);
-	max_lis = (int *)malloc(1);
-	stack_to_array(stack, arr);
-	while (i < size)
-	{
-		for (int h = 0; h < size + 1; h++) {
-			lis[h] = -1;
-		}
-		//ft_printf("\n");
-		l = i;
-		j = 0;
-		lis[k] = arr[i];
-		k++;
-		while (j <= size)
-		{
-			if (l >= size)
-				l = 0;
-			if (arr[l] > lis[k - 1])
-			{
-				lis[k] = arr[l];
-				k++;
-			}
-			j++;
-			l++;
-		}
-		lis[k] = -1;
-		for (int h = 0; h < k ; h++) {
-			if (lis[h] == -1) break;
-			//ft_printf("%d ", lis[h]);
-		}
-		
-		if(k > max)
-		{
-			max = k;
-			free(max_lis);
-			max_lis = (int *)malloc(sizeof(int) * k + 1);
-			for (int l = 0; l < max + 1; l++)
-			{
-				max_lis[l] = lis[l];
-			}
-		}
-		//ft_printf("maxxxx: %d\n", max);
-		k = 0;
-		i++;
-	}
-    return (max_lis);
+int *find_lis(t_list *stack, int *length) {
+    int size = ft_lstsize(stack);
+    int *arr = (int *)malloc(sizeof(int) * size);
+    int *lis = (int *)malloc(sizeof(int) * size);
+    int *prev = (int *)malloc(sizeof(int) * size);
+    int *best_lis = NULL;
+    int max_length = 0;
+
+    stack_to_array(stack, arr);
+    for (int start = 0; start < size; start++) {
+        for (int i = 0; i < size; i++) {
+            lis[i] = 1;
+            prev[i] = -1;
+        }
+
+        int current_max_length = 0, max_index = -1;
+
+        for (int i = 0; i < size; i++) {
+            int idx = (start + i) % size;
+            for (int j = 0; j < i; j++) {
+                int prev_idx = (start + j) % size;
+                if (arr[prev_idx] < arr[idx] && lis[j] + 1 > lis[i]) {
+                    lis[i] = lis[j] + 1;
+                    prev[i] = j;
+                }
+            }
+            if (lis[i] > current_max_length) {
+                current_max_length = lis[i];
+                max_index = i;
+            }
+        }
+        if (current_max_length > max_length) {
+            max_length = current_max_length;
+            free(best_lis);
+            best_lis = (int *)malloc(sizeof(int) * max_length);
+            for (int i = max_length - 1, k = max_index; i >= 0; i--) {
+                best_lis[i] = arr[(start + k) % size];
+                k = prev[k];
+            }
+        }
+    }
+
+    free(arr);
+    free(lis);
+    free(prev);
+
+    *length = max_length;
+    return best_lis;
 }
 
 int	check_lis(int value, int *lis)
@@ -111,30 +97,67 @@ int	check_lis(int value, int *lis)
 	return (0);
 }
 
+void	check_sa(t_list **a)
+{
+	int	num;
+
+	num = *(int *)(*a)->content;
+	while (*a && (*a)->next)
+	{
+		if ((*a)->next && *(int *)(*a)->content - 1 == *(int *)(*a)->next->content)
+		{
+			sa(a);
+			(*a)->is_sa = 1;
+			ra(a);
+		}
+		if ((*a)->next)	
+			ra(a);
+	}
+	while (*(int *)(*a)->content != num)
+		ra(a);
+}
+
 void push_all(t_list **a, t_list **b)
 {
-	int i;
-	int lis_size;
-	int *is_lis;
+    int i;
+    int lis_size;
+    int *is_lis;
+    t_list *temp;
 
-	is_lis = find_lis(*a);
-	lis_size = 0;
-	while (is_lis[lis_size] != -1)
-		lis_size++;
-	for (i = 0;ft_lstsize(*a) > lis_size; i++)
-	{
-		if (!check_lis(*(int *)(*a)->content, is_lis))
-		{
-			pb(a, b);
-		}
-		else
+	check_sa(a);
+	ft_lstprint(*a);
+    // Trova la LIS e la sua dimensione
+    is_lis = find_lis(*a, &lis_size);
+	ft_printf("LIS: ");
+	for (int i = 0; i < lis_size; i++) {
+		ft_printf("%d ", is_lis[i]);
+	}
+	ft_printf("\n");
+    // Itera finché ci sono elementi nella lista `a`
+    int size = ft_lstsize(*a);
+    for (i = 0; i < size; i++)
+    {
+        temp = *a;
+        int is_in_lis = 0;
+        for (int j = 0; j < lis_size; j++) {
+            if (*(int *)temp->content == is_lis[j]) {
+                is_in_lis = 1;
+                break;
+            }
+        }
+		if (temp->is_sa == 1)
+			ft_printf("sa\n");
+        if (is_in_lis)
 		{
 			ra(a);
 			ft_printf("ra\n");
-			i--;
 		}
-	}
+        else
+			pb(a, b);
+    }
+    free(is_lis);
 }
+
 
 
 static int	is_sorted(t_list *a)
@@ -263,6 +286,38 @@ void	do_moves(t_moves moves, t_list **a, t_list **b)
 	}
 }
 
+/* t_list *ft_lst_at(t_list *lst, int index)
+{
+    while (lst && index > 0)
+    {
+        lst = lst->next;
+        index--;
+    }
+    return lst;
+}
+
+int fragmentation_penalty(t_list *a, int value, int position)
+{
+    int penalty = 0;
+
+    // Trova i valori precedente e successivo nell'ordine di `a`
+    int prev_value = (position == 0) ? *(int *)ft_lstlast(a)->content : *(int *)ft_lst_at(a, position - 1)->content;
+    int next_value = (position == ft_lstsize(a)) ? *(int *)a->content : *(int *)ft_lst_at(a, position)->content;
+
+    // Aggiungi una penalità se `value` non è nel range corretto
+    if (value < prev_value || value > next_value)
+        penalty += abs(value - prev_value) + abs(value - next_value);
+
+    return penalty;
+} */
+
+int ft_min(int a, int b)
+{
+	if (a < b)
+		return (a);
+	return (b);
+}
+
 t_moves	find_best_push(t_list *a, t_list *b, int *vett)
 {
 	t_list	*tmp;
@@ -279,9 +334,8 @@ t_moves	find_best_push(t_list *a, t_list *b, int *vett)
 	while (tmp)
 	{
 		a_pos = calculate_a_pos(a, *(int *)tmp->content, vett);
-		
-		//ft_printf("a_pos: %d\n", a_pos);
-		//ft_printf("index: %d\n//////////////\n", *(int *)tmp->content);
+
+		// Calcola ra e rra
 		if (a_pos <= ft_lstsize(a) / 2)
 		{
 			moves.ra = a_pos;
@@ -292,6 +346,8 @@ t_moves	find_best_push(t_list *a, t_list *b, int *vett)
 			moves.ra = 0;
 			moves.rra = ft_lstsize(a) - a_pos;
 		}
+
+		// Calcola rb e rrb
 		if (b_pos <= ft_lstsize(b) / 2)
 		{
 			moves.rb = b_pos;
@@ -301,28 +357,35 @@ t_moves	find_best_push(t_list *a, t_list *b, int *vett)
 		{
 			moves.rb = 0;
 			moves.rrb = ft_lstsize(b) - b_pos;
-			//ft_printf("b_pos: %d\n", b_pos);
-			//ft_printf("b_size: %d\n", ft_lstsize(b));
 		}
-		total_moves = moves.ra + moves.rb + moves.rra + moves.rrb;
+
+		// Calcola rr e rrr
+		int rr = ft_min(moves.ra, moves.rb);       // rotazioni simultanee
+		int rrr = ft_min(moves.rra, moves.rrb);   // contro-rotazioni simultanee
+
+		// Calcola il totale delle mosse
+		total_moves = (moves.ra + moves.rb + moves.rra + moves.rrb) - (rr + rrr); // Sottrai le mosse simultanee
+
+		// Aggiungi la fragmentation penalty se necessario
+		// total_moves += fragmentation_penalty(a, *(int *)tmp->content, a_pos);
+
+		// Aggiorna il miglior risultato
 		if (total_moves < min_moves || min_moves == 0)
 		{
 			min_moves = total_moves;
-			moves.min_ra = moves.ra;
-			moves.min_rb = moves.rb;
-			moves.min_rra = moves.rra;
-			moves.min_rrb = moves.rrb;
+			moves.min_ra = moves.ra - rr;
+			moves.min_rb = moves.rb - rr;
+			moves.min_rra = moves.rra - rrr;
+			moves.min_rrb = moves.rrb - rrr;
+			moves.min_rr = rr;
+			moves.min_rrr = rrr;
 		}
 		tmp = tmp->next;
 		b_pos++;
 	}
-	//ft_printf("min_ra: %d\n", moves.min_ra);
-	//ft_printf("min_rb: %d\n", moves.min_rb);
-	//ft_printf("min_rra: %d\n", moves.min_rra);
-	//ft_printf("min_rrb: %d\n", moves.min_rrb);
-	//ft_printf("total_moves: %d\n", min_moves);
 	return (moves);
 }
+
 
 void	rotate_a_until_the_right_number_to_print_on_top_fra_parentesi_0_chiuse_parentesi(t_list **a)
 {
@@ -344,11 +407,20 @@ void	rotate_a_until_the_right_number_to_print_on_top_fra_parentesi_0_chiuse_pare
 	}
 }
 
+void	init_list(t_list **a)
+{
+	t_list *tmp = *a;
+	while (tmp) {
+		tmp->is_sa = 0;
+		tmp = tmp->next;
+	}
+}
+
 void	sorting(t_list	**a, t_list **b, int *vett)
 {
 	t_list *tmp;
 
-	
+	init_list(a);
 	push_all(a, b);
 	/* while (ft_lstsize(*a) > 2)
 	{

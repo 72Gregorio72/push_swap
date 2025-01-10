@@ -31,7 +31,7 @@ echo "" > failed_test_100.txt
 echo "" > passed_test_100.txt
 
 for ((i = 0; i < tests; i++)); do
-	ARG=`seq -100 0 | shuf -n 100`
+	ARG=`seq 0 100 | shuf -n 100`
 	moves=`./push_swap $ARG`
 	tot_moves=$(if [[ -n $moves ]]; then echo "$moves" | wc -l; else echo 0; fi)
 	checker=$(if [[ -n $moves ]]; then echo "$moves"; else echo -n ""; fi | ./checker_linux $ARG 2>/dev/null)
