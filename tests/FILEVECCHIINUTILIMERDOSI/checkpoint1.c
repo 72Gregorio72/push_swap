@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   sorting.c                                          :+:      :+:    :+:   */
+/*   checkpoint1.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: gpicchio <gpicchio@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/07 12:34:01 by gpicchio          #+#    #+#             */
-/*   Updated: 2025/01/13 10:40:04 by gpicchio         ###   ########.fr       */
+/*   Updated: 2025/01/13 09:51:35 by gpicchio         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,20 +125,8 @@ void push_all(t_list **a, t_list **b)
     int lis_size;
     int *is_lis;
     t_list *temp;
-	int sa_num;
 
 	check_sa(a);
-	temp = *a;
-	sa_num = 0;
-	while (temp)
-	{
-		if (temp->is_sa == 1)
-		{
-			sa_num++;
-		}
-		temp = temp->next;
-	}
-	//ft_printf("sa_num: %d\n", sa_num);
 	//ft_lstprint(*a);
     // Trova la LIS e la sua dimensione
     is_lis = find_lis(*a, &lis_size);
@@ -149,7 +137,7 @@ void push_all(t_list **a, t_list **b)
 	ft_printf("\n"); */
     // Itera finché ci sono elementi nella lista `a`
     int size = ft_lstsize(*a);
-    while (sa_num != 0 || ft_lstsize(*a) > lis_size)
+    for (i = 0; i < size; i++)
     {
         temp = *a;
         int is_in_lis = 0;
@@ -163,17 +151,11 @@ void push_all(t_list **a, t_list **b)
 		{
 			ft_printf("sa\n");
 			temp->is_sa = 0;
-			sa_num--;
 		}
-        else if (is_in_lis)
+        if (is_in_lis)
 		{
-			if (sa_num != 0 || ft_lstsize(*a) > lis_size)
-			{
-                ra(a);
-                ft_printf("ra\n");
-            }
-			else
-				break ;
+			ra(a);
+			ft_printf("ra\n");
 		}
         else
 			pb(a, b);
@@ -234,7 +216,7 @@ void	init_moves(t_moves *moves)
 	moves->min_rr = 0;
 	moves->min_rra = 0;
 	moves->min_rrb = 0;
-	moves->min_rrr = 0;
+	moves->min_rrr = 0;	
 }
 
 void	do_moves(t_moves moves, t_list **a, t_list **b)
@@ -443,7 +425,6 @@ void	sorting(t_list	**a, t_list **b, int *vett)
 
 	init_list(a);
 	push_all(a, b);
-	//ft_lstprint(*a);
 	/* while (ft_lstsize(*a) > 2)
 	{
 		pb(a, b);
