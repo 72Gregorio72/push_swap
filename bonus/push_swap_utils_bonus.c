@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   push_swap_bonus_utils.c                            :+:      :+:    :+:   */
+/*   push_swap_utils_bonus.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: gpicchio <gpicchio@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 14:25:10 by gpicchio          #+#    #+#             */
-/*   Updated: 2025/01/16 17:22:35 by gpicchio         ###   ########.fr       */
+/*   Updated: 2025/01/17 10:26:09 by gpicchio         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,11 @@ void	get_moves(t_list **a, t_list **b)
 	while (line != NULL)
 	{
 		if (!check_all(a, b, line))
-			return (free(line), (void)0);
+		{
+			free(line);
+			get_next_line(-42);
+			return ;
+		}
 		free(line);
 		line = get_next_line(0);
 	}
@@ -28,6 +32,7 @@ void	get_moves(t_list **a, t_list **b)
 		ft_printf("OK\n");
 	else
 		ft_printf("KO\n");
+	get_next_line(-42);
 }
 
 char	**fill_valid_moves(void)

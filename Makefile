@@ -13,11 +13,11 @@ SRCS = srcs/swap.c srcs/rotate.c \
 	algorithm/do_moves_utils.c \
 	algorithm/do_moves.c 
 
-BONUS = bonus/push_swap_bonus.c bonus/push_bonus.c bonus/push_swap_bonus_utils.c
+BONUS = bonus/push_swap_bonus.c bonus/push_bonus.c bonus/push_swap_utils_bonus.c
 INCLUDE = includes
 CC = cc -g -Wall -Wextra -Werror
 
-all: $(NAME) bonus
+all: $(NAME)
 
 $(NAME): $(SRCS)
 	make -C libft all bonus

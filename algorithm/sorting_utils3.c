@@ -6,7 +6,7 @@
 /*   By: gpicchio <gpicchio@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 15:58:18 by gpicchio          #+#    #+#             */
-/*   Updated: 2025/01/16 13:09:36 by gpicchio         ###   ########.fr       */
+/*   Updated: 2025/01/17 10:21:54 by gpicchio         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ void	push_all(t_list **a, t_list **b)
 
 int	is_sorted(t_list *a)
 {
-	while (a->next && a)
+	while (a && a->next)
 	{
 		if (*(int *)a->content > *(int *)a->next->content)
 			return (0);
